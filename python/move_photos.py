@@ -14,8 +14,11 @@ from tqdm.rich import tqdm
 # Enable HEIC support
 register_heif_opener()
 
-SOURCE_DIR = os.path.expanduser("/photos")
-TARGET_BASE = os.path.expanduser("/photos/test")
+SOURCE_DIR = os.path.expanduser("/home/g/Pictures/test")
+TARGET_BASE = os.path.expanduser("/home/g/Pictures/test")
+
+# Files to ignore/delete during cleanup
+JUNK_FILES = {'.ds_store', 'thumbs.db', '.directory', 'desktop.ini'}
 
 def get_accurate_date(path):
     try:
@@ -43,7 +46,7 @@ if not all_files:
     print("No matching files found.")
     exit()
 
-# --- STEP 2: Move files with progress bar ---
+# --- STEP 2: Move files with rich progress bar ---
 moved_count = 0
 with tqdm(total=len(all_files), desc="[bold cyan]Organizing Photos[/bold cyan]", unit="file") as pbar:
     for file_path in all_files:
@@ -68,17 +71,24 @@ with tqdm(total=len(all_files), desc="[bold cyan]Organizing Photos[/bold cyan]",
         
         pbar.update(1)
 
-# --- STEP 3: Delete Empty Directories ---
-print("\n🧹 Cleaning up empty directories...")
-# topdown=False is critical: it visits leaf nodes first
+# --- STEP 3: Aggressive Empty Directory Cleanup ---
+print("\n🧹 Cleaning up empty directories and system junk...")
+# 
 for root, dirs, files in os.walk(SOURCE_DIR, topdown=False):
     for name in dirs:
         dir_path = os.path.join(root, name)
+        
+        # Check for and delete junk files that block rmdir
         try:
-            # os.rmdir only deletes a directory if it is completely empty
+            current_contents = os.listdir(dir_path)
+            for item in current_contents:
+                if item.lower() in JUNK_FILES:
+                    os.remove(os.path.join(dir_path, item))
+            
+            # Now try to remove the directory
             if not os.listdir(dir_path):
                 os.rmdir(dir_path)
-        except Exception as e:
-            pass # Folder likely wasn't empty or was in use
+        except Exception:
+            continue
 
-print(f"✨ Finished! {moved_count} items moved and empty folders removed.")
+print(f"✨ Finished! {moved_count} items moved and source directories pruned.")
