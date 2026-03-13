@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Media Downloader",
+  "version": "1.0",
+  "description": "Adds a download button to media and saves it to the downloads folder.",
+  "permissions": [
+    "downloads",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["styles.css"],
+      "js": ["content.js"]
+    }
+  ]
+}
