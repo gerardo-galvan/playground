@@ -14,8 +14,8 @@ from tqdm.rich import tqdm
 # Enable HEIC support
 register_heif_opener()
 
-SOURCE_DIR = os.path.expanduser("/home/g/Pictures/test")
-TARGET_BASE = os.path.expanduser("/home/g/Pictures/test")
+SOURCE_DIR = os.path.expanduser(r"C:\Photos\temp")
+TARGET_BASE = os.path.expanduser(r"C:\Photos\temp")
 
 # Files to ignore/delete during cleanup
 JUNK_FILES = {'.ds_store', 'thumbs.db', '.directory', 'desktop.ini'}

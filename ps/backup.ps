@@ -1,0 +1,31 @@
+function backup {
+    param(
+        [Parameter(ParameterSetName='Movies')][Alias('m')][switch]$movies,
+        [Parameter(ParameterSetName='Photos')][Alias('p')][switch]$photos
+    )
+
+    # 1. Check if the BitLocker drive is actually unlocked/mounted
+    if (!(Test-Path "E:\")) {
+        Write-Error "Error: Drive E: is not found. Is your BitLocker drive unlocked?"
+        return
+    }
+
+    # 2. Define common Robocopy flags (to keep the script clean)
+    $flags = "/MIR", "/MT:8", "/R:5", "/W:5", "/NP", "/TEE"
+
+    # 3. Execute based on the flag used
+    switch ($PSCmdlet.ParameterSetName) {
+        'Movies' {
+            Write-Host "--- Starting Movie Sync ---" -ForegroundColor Cyan
+            robocopy "\\nas\x\Movies" "E:\Movies" @flags /LOG:"C:\temp\nas_sync_movies.txt"
+        }
+        'Photos' {
+            Write-Host "--- Starting Photo Sync ---" -ForegroundColor Green
+            # Update the source path below to your actual Photos location
+            robocopy "\\nas\x\Photos" "E:\Photos" @flags /LOG:"C:\temp\nas_sync_photos.txt"
+        }
+        Default {
+            Write-Host "Usage: backup -movies (or -m) | backup -photos (or -p)" -ForegroundColor Yellow
+        }
+    }
+}

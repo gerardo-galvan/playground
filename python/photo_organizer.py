@@ -7,7 +7,7 @@ from tqdm.rich import tqdm  # pip install tqdm rich
 
 # --- DYNAMIC CONFIGURATION ---
 if os.name == 'nt':  # Windows
-    BASE_DIR = Path("G:/Files/Photos/Import")
+   BASE_DIR = Path("C:/Users/gerardo/Downloads/temp")
 else:  # RHEL 10
     BASE_DIR = Path("/home/g/Pictures/temp")
 
