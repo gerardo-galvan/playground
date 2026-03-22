@@ -12,7 +12,7 @@ SYNC_PATHS = {
     "books": ("\\\\nas\\x\\Books", "E:\\Books"),
     "downloads": ("\\\\nas\\x\\Downloads", "E:\\Downloads"),
     "photos": ("\\\\nas\\Files\\Photos\\Albums\\Imports\\iPhone\\", "E:\\Files\\Photos\\Albums\\Imports\\iPhone\\"),
-  "temp": ("\\\\nas\\x\\Temp", "E:\\Temp"),
+    "temp": ("\\\\nas\\x\\Temp", "E:\\Temp")
 }
 
 def run_backup(category):
